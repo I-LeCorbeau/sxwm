@@ -1,0 +1,13 @@
+# make sxhkd reload its configuration files:
+super + Escape
+	pkill -USR1 -x sxhkd
+
+## SXWM keybindings
+
+# Focus next/prev window
+super + {j, k}
+	focus.sh {next, prev}
+
+# Snap windows
+ctrl + super + {h, j, k, l, Return}
+	snap.sh {left, down, up, right, center}

@@ -1,0 +1,15 @@
+#!/bin/sh
+
+# Autostart
+sxhkd &
+
+# The event watcher. Here you can add custom scripts/commands to
+# be executed when a given event occurs.
+# For a list of all events that can be added, read 'man wew'.
+
+# Uncomment to enable
+#wew | while read ev wid args; do wattr o $wid ||
+#	case $ev in
+#		MAP) custom cmd or script ;;
+#	esac
+#done
