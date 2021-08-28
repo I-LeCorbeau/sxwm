@@ -56,6 +56,7 @@ it may be possible to use the ignw tool from sxutils to force sxwm to ignore it.
 - Window grouping utility (sxutils)
 - debug?
 
-##Credits
+##Credits  
+
 SXWM began as a fork of dcat's [swm](https://github.com/dcat/swm). It has been modified almost beyond recognition, but pieces of code remains.
 
