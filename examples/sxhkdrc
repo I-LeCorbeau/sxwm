@@ -6,7 +6,15 @@ super + Escape
 
 # Focus next/prev window
 super + {j, k}
-	focus.sh {next, prev}
+	focus.sh {next, prev} "$(pfw)"
+	
+# Move windows around
+super + shift + {h, j, k, l}
+	wmv {-5 0, 0 5, 0 -5, 5 0} "$(pfw)"
+	
+# Resize Windows
+super + {Left, Down, Up, Right}
+	wrs {-5 0, 0 5, 0 -5, 5 0}
 
 # Snap windows
 ctrl + super + {h, j, k, l, Return}
