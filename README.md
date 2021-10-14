@@ -1,7 +1,12 @@
 ###SXWM - Simple/Scriptable X Window Manager
 
 ```
-Still under development. Some documentation and other stuff are lacking.
+Still under development. Some documentation and other stuff are lacking. Important note: the main  
+reasons for the existence of sxwm and sxutils is for me to learn C, and have fun with shell scripting.  
+There will be periods where weeks (or months) can go by without any activity in the repository. That's  
+not because the project is abandoned, it's simply because I may not have the time or inspiration to work  
+on it. All I can guarantee is that I will never leave it in a buggy state, and if I encounter a bug or  
+someone reports one, I will fix it as soon as humanly possible.
 ```
 
 ## Description  
