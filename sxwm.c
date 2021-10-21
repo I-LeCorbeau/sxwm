@@ -3,6 +3,7 @@
  */
 
 #include <sys/stat.h>
+#include "queue.h"
 #include <sys/types.h>
 
 #include <err.h>
@@ -22,10 +23,10 @@ xcb_screen_t		*scr;
 xcb_window_t		 root;
 xcb_window_t		 focuswin;
 struct Monitor		*mons;
+struct Monitor_q	 Monitorq;
 int			 sw, sh;
 int			 x, y, w, h;
 char			 config_path[MAXLEN];
-//int			 bh;
 
 #include "config.h"
 
@@ -54,7 +55,7 @@ configure(struct Client *c)
 	xcb_send_event(conn, false, c->win, XCB_EVENT_MASK_STRUCTURE_NOTIFY, (char*)&config_event);
 }
 
-struct Monitor *
+/* struct Monitor *
 createmon(void)
 {
 	struct Monitor *m;
@@ -62,7 +63,7 @@ createmon(void)
 	m = xmalloc(sizeof(struct Monitor));
 
 	return m;
-}
+} */
 
 void
 moveresize(xcb_window_t win)
@@ -79,13 +80,18 @@ moveresize(xcb_window_t win)
 			| XCB_CONFIG_WINDOW_WIDTH | XCB_CONFIG_WINDOW_HEIGHT, values);
 }
 
-void
+struct Client *
 manage(xcb_window_t win)
 {
-	struct Client *c;
-	uint32_t values[2];
-	c = xmalloc(sizeof(struct Client));
+	struct Client	*c;
+	//int		 exists = 1;
+	uint32_t	 values[2];
+
+	c = xmalloc(sizeof(*c));
 	c->win = win;
+
+	if (exists(win) != 1)
+		return NULL;
 
 	/* Get Geometry  */
 	c->x = getgeom(win, ATTR_X);
@@ -114,9 +120,39 @@ manage(xcb_window_t win)
 	values[1] = scr->height_in_pixels - (GAPPX * 2) - (BORDERPX * 2) - BARPADDING;
 	xcb_configure_window(conn, c->win, XCB_CONFIG_WINDOW_WIDTH | XCB_CONFIG_WINDOW_HEIGHT, values);
 #endif
-
+	return c;
 }
 
+struct Client *
+findclient(xcb_window_t win)
+{
+	struct Monitor	*mon;
+	struct Client	*c;
+
+	TAILQ_FOREACH(mon, &Monitorq, entry) {
+		TAILQ_FOREACH(c, &mon->clientq, entry) {
+			if (c->win == win)
+				return c;
+		}
+	}
+	return NULL;
+}
+
+int
+exists(xcb_window_t win)
+{
+	xcb_get_window_attributes_cookie_t	 c;
+	xcb_get_window_attributes_reply_t	*r;
+
+	c = xcb_get_window_attributes(conn, win);
+	r = xcb_get_window_attributes_reply(conn, c, NULL);
+
+	if (r == NULL)
+		return 0;
+
+	free(r);
+	return 1;
+}
 int
 getattrs(xcb_window_t win, int attr)
 {
@@ -191,6 +227,34 @@ setfocus(xcb_window_t win)
 
 	xcb_flush(conn);
 }
+void
+setupmon(int which)
+{
+	struct Monitor	*mon;
+
+	mon = xmalloc(sizeof(*mon));
+
+	TAILQ_INIT(&mon->clientq);
+	//TAILQ_INIT(&sc->groupq);
+
+	mon->which = which;
+
+	TAILQ_INSERT_TAIL(&Monitorq, mon, entry);
+}
+
+struct Monitor *
+findmon(xcb_window_t win)
+{
+	struct Monitor	*mon;
+
+	TAILQ_FOREACH(mon, &Monitorq, entry) {
+		if (mon->root == win)
+			return mon;
+	}
+	//warnx("%s: failure win 0x%lx", __func__, win);
+	return NULL;
+}
+
 
 int
 setup(void)
@@ -228,20 +292,6 @@ setup(void)
 	xcb_flush(conn);
 
 	return 0;
-}
-
-struct Client
-*wintoclient(xcb_window_t win)
-{
-	struct Client *c;
-	struct Monitor *m;
-
-	for (m = mons; m; m = m->next)
-		for (c = m->clients; c; c = c->next)
-			if (c->win == w)
-				return c;
-	return NULL;
-
 }
 
 void *

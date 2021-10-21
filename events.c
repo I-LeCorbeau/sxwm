@@ -2,6 +2,8 @@
  * See LICENSE file for details
  */
 
+#include "queue.h"
+
 #include <err.h>
 #include <errno.h>
 #include <stdbool.h>
@@ -172,7 +174,7 @@ configurerequest(xcb_generic_event_t *ev)
 	xcb_configure_request_event_t *e;
 	e = (xcb_configure_request_event_t *)ev;
 
-	if ((c = wintoclient(e->window))) {
+	if ((c = findclient(e->window)) != NULL) {
 		if(e->value_mask & XCB_CONFIG_WINDOW_X)
 		       c->x = e->x;
 		if(e->value_mask & XCB_CONFIG_WINDOW_Y)
