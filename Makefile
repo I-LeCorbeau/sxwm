@@ -28,8 +28,8 @@ clean:
 
 dist: clean
 	mkdir -p sxwm-${VERSION}
-	cp -R LICENSE Makefile README config.def.h config.mk\
-		sxwm.1 sxwm.h ${SRC} sxwm.png sxwm-${VERSION}
+	cp -R LICENSE Makefile config.h config.mk\
+		sxwm.1 sxwm.h ${SRC} sxwm-${VERSION}
 	tar -cf sxwm-${VERSION}.tar sxwm-${VERSION}
 	gzip sxwm-${VERSION}.tar
 	rm -rf sxwm-${VERSION}

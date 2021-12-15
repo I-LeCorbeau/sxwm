@@ -25,7 +25,6 @@ struct Monitor		*mons;
 int			 sw, sh;
 int			 x, y, w, h;
 char			 config_path[MAXLEN];
-//int			 bh;
 
 #include "config.h"
 
@@ -65,21 +64,6 @@ createmon(void)
 }
 
 void
-moveresize(xcb_window_t win)
-{
-
-	uint32_t values[] = { x, y, w, h };
-
-	//x = GAPPX;
-	//y = GAPPX + BARPADDING;
-	//w = scr->width_in_pixels - (GAPPX * 2) - (BORDERPX * 2) ;
-	//h = scr->height_in_pixels - (GAPPX * 2) - (BORDERPX * 2) - BARPADDING;
-
-	xcb_configure_window(conn, win, XCB_CONFIG_WINDOW_X | XCB_CONFIG_WINDOW_Y
-			| XCB_CONFIG_WINDOW_WIDTH | XCB_CONFIG_WINDOW_HEIGHT, values);
-}
-
-void
 manage(xcb_window_t win)
 {
 	struct Client *c;
@@ -96,7 +80,7 @@ manage(xcb_window_t win)
 	/* subscribe to events */
 	values[0] = XCB_EVENT_MASK_ENTER_WINDOW;
 	values[1] = XCB_EVENT_MASK_SUBSTRUCTURE_NOTIFY;
-	xcb_change_window_attributes(conn, c->win, XCB_CW_EVENT_MASK, values);
+	xcb_change_window_attributes_checked(conn, c->win, XCB_CW_EVENT_MASK, values);
 
 	/* border width */
 	values[0] = BORDERPX;
@@ -195,12 +179,6 @@ setfocus(xcb_window_t win)
 int
 setup(void)
 {
-	/* init xcb and grab events */
-	//uint32_t mask = 0;
-	//uint32_t values[2];
-	//xcb_void_cookie_t cookie;
-	//xcb_generic_error_t *error;
-
 	if (xcb_connection_has_error(conn = xcb_connect(NULL, NULL)))
 		return -1;
 	
@@ -210,13 +188,6 @@ setup(void)
 	sw = scr->width_in_pixels;
 	sh = scr->height_in_pixels;
 
-	xcb_grab_button(conn, 0, scr->root, XCB_EVENT_MASK_BUTTON_PRESS |
-			XCB_EVENT_MASK_BUTTON_RELEASE, XCB_GRAB_MODE_ASYNC,
-			XCB_GRAB_MODE_ASYNC, scr->root, XCB_NONE, 1, MOD);
-
-	xcb_grab_button(conn, 0, scr->root, XCB_EVENT_MASK_BUTTON_PRESS |
-			XCB_EVENT_MASK_BUTTON_RELEASE, XCB_GRAB_MODE_ASYNC,
-			XCB_GRAB_MODE_ASYNC, scr->root, XCB_NONE, 3, MOD);
 	/* Subscribe to events */
 	uint32_t cw_values[] = {
 		XCB_EVENT_MASK_SUBSTRUCTURE_NOTIFY | XCB_EVENT_MASK_SUBSTRUCTURE_REDIRECT |
@@ -225,23 +196,18 @@ setup(void)
 	};
 	xcb_change_window_attributes_checked(conn, root, XCB_CW_EVENT_MASK, cw_values);
 
+	/* Grab them buttons */
+	xcb_grab_button(conn, 0, scr->root, XCB_EVENT_MASK_BUTTON_PRESS |
+			XCB_EVENT_MASK_BUTTON_RELEASE, XCB_GRAB_MODE_ASYNC,
+			XCB_GRAB_MODE_ASYNC, scr->root, XCB_NONE, 1, MOD);
+
+	xcb_grab_button(conn, 0, scr->root, XCB_EVENT_MASK_BUTTON_PRESS |
+			XCB_EVENT_MASK_BUTTON_RELEASE, XCB_GRAB_MODE_ASYNC,
+			XCB_GRAB_MODE_ASYNC, scr->root, XCB_NONE, 3, MOD);
+
 	xcb_flush(conn);
 
 	return 0;
-}
-
-struct Client
-*wintoclient(xcb_window_t win)
-{
-	struct Client *c;
-	struct Monitor *m;
-
-	for (m = mons; m; m = m->next)
-		for (c = m->clients; c; c = c->next)
-			if (c->win == w)
-				return c;
-	return NULL;
-
 }
 
 void *

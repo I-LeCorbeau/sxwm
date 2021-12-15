@@ -78,24 +78,23 @@ extern int			 x, y;		/* Window X and Y coordinates Is it even needed? */
 extern char			 config_path[];
 
 /* Function declarations */
+void		 buttonrelease(xcb_generic_event_t *ev);
 void		 cleanup(void);
 void		 configure(struct Client *c);
 void		 configurenotify(xcb_generic_event_t *ev);
 void		 configurerequest(xcb_generic_event_t *ev);
 struct Monitor	*createmon(void);
+void		 destroynotify(xcb_generic_event_t *ev);
+void		 enternotify(xcb_generic_event_t *ev);
+void		 eventshandler(void);
 int		 getattrs(xcb_window_t win, int);
 int		 getgeom(xcb_window_t win, int);
-//void		 grabbutton(void);
-void		 eventshandler(void);
 xcb_window_t	 isfocused(void);
 void		 manage(xcb_window_t win);
 void		 maprequest(xcb_generic_event_t *ev);
 void		 moveresize(xcb_window_t);
-//void		 setborder(xcb_window_t win);
 void		 setfocus(xcb_window_t win);
 int		 setup(void);
-void		 split(xcb_window_t win);
-struct Client	*wintoclient(xcb_window_t win);
 void		*xmalloc(size_t);
 void		 run_config(int);
 
