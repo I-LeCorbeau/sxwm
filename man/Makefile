@@ -18,7 +18,8 @@ MAN =           \
 	atomx.1 \
 	wew.1	\
 	wname.1	\
-	sxwm.1
+	sxwm.1  \
+	sxwmrc.5
 
 .POSIX:
 
