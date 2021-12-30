@@ -1,15 +1,49 @@
 #!/bin/sh
 
 # Autostart
-sxhkd &
+#sxhkd &
 
-# The event watcher. Here you can add custom scripts/commands to
-# be executed when a given event occurs.
-# For a list of all events that can be added, read 'man wew'.
+# Configuration variables
+BORDERPX=2
+BARPADDING=20
+GAPPX=0
+FOCUSCOL=5294E2	
+UNFOCUSCOL=ffffff
 
-# Uncomment to enable
-#wew | while read ev wid args; do wattr o $wid ||
-#	case $ev in
-#		MAP) custom cmd or script ;;
-#	esac
-#done
+# Basic functions called multiple times
+focusprev() {
+	prevwin=$(lsw | sed -n '$p')
+	wtf "$prevwin"
+}
+
+setborders_focused() {
+	chwb -c "$FOCUSCOL" -s "$BORDERPX" $wid
+}
+
+setborders_unfocused() {
+	chwb -c "$UNFOCUSCOL" -s "$BORDERPX" $wid
+}
+
+# ev_ functions
+ev_destroy() {
+	focusprev
+}
+
+ev_map() {
+	setborders_focused
+	wtf $wid
+}
+
+# The events watcher
+wew | while read ev wid args; do wattr o $wid ||
+	case $ev in
+		ENTER) setborders_focused ;;
+		FOCUS_IN) setborders_focused ;;
+		FOCUS_OUT) setborders_unfocused ;;
+		LEAVE) setborders_unfocused ;;
+		MAP)	ev_map
+		       	.local/bin/layout.sh ;; 
+		DESTROY) ev_destroy
+			.local/bin/layout.sh ;;
+	esac
+done

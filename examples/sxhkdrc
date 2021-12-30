@@ -1,3 +1,19 @@
+#
+# wm independent hotkeys
+#
+
+# st
+alt + Return
+	/usr/local/bin/st
+
+# xterm
+alt + shift + Return
+	xterm
+
+# program launcher
+alt + p
+	dmenu_run -p Run
+
 # make sxhkd reload its configuration files:
 super + Escape
 	pkill -USR1 -x sxhkd
@@ -6,7 +22,7 @@ super + Escape
 
 # Focus next/prev window
 super + {j, k}
-	focus.sh {next, prev} "$(pfw)"
+	.local/bin/focus.sh {next, prev} "$(pfw)"
 	
 # Move windows around
 super + shift + {h, j, k, l}
@@ -18,4 +34,14 @@ super + {Left, Down, Up, Right}
 
 # Snap windows
 ctrl + super + {h, j, k, l, Return}
-	snap.sh {left, down, up, right, center}
+	.local/bin/snap.sh {left, down, up, right, center}
+
+# Change Layout
+super + m
+	.local/bin/chlt.sh mstack.sh
+
+super + s
+	.local/bin/chlt.sh split.sh
+
+super + f
+	.local/bin/chlt.sh float.sh

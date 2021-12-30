@@ -2,11 +2,11 @@
 
 ## snap.sh by Ian LeCorbeau
 
-ROOT=$(/usr/local/bin/lsw -r)
-MONW=$(/usr/local/bin/wattr w "$ROOT")
-MONH=$(/usr/local/bin/wattr h "$ROOT")
+ROOT=$(lsw -r)
+MONW=$(wattr w "$ROOT")
+MONH=$(wattr h "$ROOT")
 CURWIN=$(pfw)
-BARPX=24
+BARPX=20
 BORDERPX=2
 GAPPX=0
 SCRW=$((MONW - GAPPX - BORDERPX))

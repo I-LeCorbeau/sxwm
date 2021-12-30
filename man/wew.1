@@ -1,0 +1,102 @@
+.Dd December 17, 2014
+.Dt WEW 1
+.Os wmutils
+.Sh NAME
+.Nm wew
+.Nd window event watcher
+.Sh SYNOPSIS
+.Nm wew
+.Op Fl l
+.Op Fl m Ar mask
+.Sh DESCRIPTION
+.Nm
+is a daemon that prints X events to stdout in the form:
+.Pp
+.Bd -literral
+.Ar event wid [args]
+.Ed
+.Pp
+See section EVENT VALUES for the possible values of
+.Ar event .
+.Bl -tag -width Ds
+.It Fl l
+List event mask values
+.It Fl m Ar mask
+Set new windows event mask to
+.Ar mask
+Multiple events are registered by performing a bitwise OR of their values.
+(defaults to STRUCTURE_NOTIFY|ENTER_NOTIFY|FOCUS_CHANGE). The events
+registered on the root window cannot be modified.
+.El
+.Sh EVENT VALUES
+Events will be reported according to these names:
+.Pp
+.Bl -bullet -compact
+.It
+.Dv CREATE
+.It
+.Dv DESTROY
+.It
+.Dv BUTTON_PRESS
+.It
+.Dv BUTTON_RELEASE
+.It
+.Dv MOTION
+.It
+.Dv ENTER
+.It
+.Dv LEAVE
+.It
+.Dv CONFIGURE
+.It
+.Dv KEY_PRESS
+.It
+.Dv FOCUS_IN
+.It
+.Dv FOCUS_OUT
+.It
+.Dv KEYMAP
+.It
+.Dv EXPOSE
+.It
+.Dv GRAPHICS_EXPOSURE
+.It
+.Dv NO_EXPOSURE
+.It
+.Dv VISIBILITY
+.It
+.Dv UNMAP
+.It
+.Dv MAP
+.It
+.Dv MAP_REQUEST
+.It
+.Dv REPARENT
+.It
+.Dv CONFIGURE_REQUEST
+.It
+.Dv GRAVITY
+.It
+.Dv RESIZE_REQUEST
+.It
+.Dv CIRCULATE
+.It
+.Dv PROPERTY
+.It
+.Dv SELECTION_CLEAR
+.It
+.Dv SELECTION_REQUEST
+.It
+.Dv SELECTION
+.It
+.Dv COLORMAP
+.It
+.Dv CLIENT_MESSAGE
+.It
+.Dv MAPPING
+.El
+.Sh ENVIRONMENT
+.Nm
+acts on the X display specified by the
+.Ev DISPLAY
+variable.

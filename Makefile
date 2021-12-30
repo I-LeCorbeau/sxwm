@@ -1,50 +1,59 @@
-# sxwm - Simple/Scriptable X Window Manager
-# See LICENSE file for copyright and license details
-
 include config.mk
 
-SRC = sxwm.c events.c
-OBJ = ${SRC:.c=.o}
+HDR = arg.h util.h sxwm.h
+SRC =           \
+	pfw.c   \
+	lsw.c   \
+	mapw.c  \
+	killw.c \
+	wattr.c \
+	wtp.c   \
+	wmv.c   \
+	chwso.c \
+	wtf.c   \
+	wrs.c   \
+	chwb.c  \
+	ignw.c  \
+	wmp.c   \
+	slw.c   \
+	atomx.c	\
+	wew.c	\
+	wname.c \
+	sxwm.c
 
-all: options sxwm
+OBJ = $(SRC:.c=.o)
+BIN = $(SRC:.c=)
+MAN = $(SRC:.c=.1)
 
-options:
-	@echo sxwm build options:
-	@echo "CFLAGS   = ${CFLAGS}"
-	@echo "LDFLAGS  = ${LDFLAGS}"
-	@echo "CC       = ${CC}"
+.POSIX:
+.SUFFIXES: .1 .1.gz
 
+all: binutils
+
+binutils: $(BIN)
+
+$(OBJ): $(HDR) util.o
+
+.o:
+	@echo "LD $@"
+	@$(LD) $< util.o -o $@ $(LDFLAGS)
 
 .c.o:
-	${CC} -c ${CFLAGS} $<
+	@echo "CC $<"
+	@$(CC) -c $< -o $@ $(CFLAGS)
 
-${OBJ}: config.h config.mk
-
-sxwm: ${OBJ}
-	${CC} -o $@ ${OBJ} ${LDFLAGS}
-
-clean:
-	rm -f sxwm ${OBJ} sxwm-${VERSION}.tar.gz
-
-dist: clean
-	mkdir -p sxwm-${VERSION}
-	cp -R LICENSE Makefile config.h config.mk\
-		sxwm.1 sxwm.h ${SRC} sxwm-${VERSION}
-	tar -cf sxwm-${VERSION}.tar sxwm-${VERSION}
-	gzip sxwm-${VERSION}.tar
-	rm -rf sxwm-${VERSION}
-
-install: all
-	mkdir -p ${DESTDIR}${PREFIX}/bin
-	cp -f sxwm ${DESTDIR}${PREFIX}/bin
-	chmod 755 ${DESTDIR}${PREFIX}/bin/sxwm
-	mkdir -p ${DESTDIR}${MANPREFIX}/man1
-	sed "s/VERSION/${VERSION}/g" < sxwm.1 > ${DESTDIR}${MANPREFIX}/man1/sxwm.1
-	chmod 644 ${DESTDIR}${MANPREFIX}/man1/sxwm.1
+install: $(BIN)
+	mkdir -p $(DESTDIR)$(PREFIX)/bin/
+	cp -f $(BIN) $(DESTDIR)$(PREFIX)/bin/
+	chmod 755 $(DESTDIR)$(PREFIX)/bin/sxwm
+	cd man; $(MAKE) install
 
 uninstall:
-	rm -f ${DESTDIR}${PREFIX}/bin/sxwm\
-		${DESTDIR}${MANPREFIX}/man1/sxwm.1
+	@echo "uninstalling binaries"
+	@for util in $(BIN); do \
+		rm -f $(DESTDIR)$(PREFIX)/bin/$$util; \
+	done
+	cd man; $(MAKE) uninstall
 
-.PHONY: all options clean dist install uninstall
-	rm -f ${DESTDIR}${PREFIX}/bin/${BIN}
+clean :
+	rm -f $(OBJ) $(BIN) util.o

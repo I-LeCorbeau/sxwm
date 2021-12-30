@@ -1,0 +1,65 @@
+.Dd December 29, 2021
+.Dt SXWM 1
+.Os sxwm
+.Sh NAME
+.Nm sxwm
+.Nd Simple/Scriptable Window Manager for X
+.Sh DESCRIPTION
+.Nm
+is a simple and scriptable window manager for X that comes with a collection of small command line utilities to manipulate windows. By default, the
+.Nm
+binary executable only handles the mouse, takes all configure requests, and executes its configuration script (sxwmrc). Everything else is handled by the command line utilities, shell scripts, keybindings (via sxhkd or other such programs), and the window event watcher (wew) in sxwmrc.
+.Sh USAGE
+To use
+.Nm
+simply copy the example sxwmrc to .config/sxwm, make it executable, and add exec sxwm at the end of .xinitrc or .xsession.
+.Pp
+The example sxwmrc, as well as a sample sxhkdrc file, is located in the examples subdirectory. Custom scripts (including automatic window layouts) are available in examples/scripts.
+.Sh COMMANDS
+.Bl -tag -width Ds -offset 60
+.It chwb
+change window's border
+.It chwso
+change window's stacking order
+.It ignw
+ignore/unignore window
+.It killw
+kill windows
+.It lsw
+list windows
+.It mapw
+map/unmap windows
+.It pfw
+print focused window
+.It wattr
+show window's attributes
+.It wew
+watch for window events
+.It wmp
+move the mouse pointer
+.It wmv
+move a window
+.It wrs
+resize a window
+.It wtf
+focus a window
+.It wtp
+teleport a window
+
+.Sh SEE ALSO
+.Xr sxwmrc 5 ,
+.Xr chwb 1 ,
+.Xr chwso 1 ,
+.Xr ignw 1 ,
+.Xr killw 1 ,
+.Xr lsw 1 ,
+.Xr mapw 1 ,
+.Xr pfw 1 ,
+.Xr wattr 1 ,
+.Xr wew 1 ,
+.Xr wmp 1 ,
+.Xr wmv 1 ,
+.Xr wname 1 ,
+.Xr wrs 1 ,
+.Xr wtf 1 ,
+.Xr wtp 1

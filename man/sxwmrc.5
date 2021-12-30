@@ -1,0 +1,79 @@
+./"	ISC LICENSE
+./"
+./"	copyright (c) 2021, Ian LeCorbeau <I-LeCorbeau (at) protonmail (dot) com>
+./"
+./"	Permission to use, copy, modify, and/or distribute this software for any
+./"	purpose with or without fee is hereby granted, provided that the above
+./"	copyright notice and this permission notice appear in all copies.
+./"
+./"	THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+./"	WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+./"	MERCHANTABILITY AND FITNESS IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+./"	ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+./"	WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+./"	ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+./"	OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+.Dd December 30, 2021
+.Dt SXWMRC 5
+.Os sxwmrc
+.Sh NAME
+.Nm sxwmrc
+.Nd Simple/Scriptable X Window Manager configuration file
+.Sh DESCRIPTION
+This manual page describes the
+.Xr sxwm 1
+configuration file.
+.Pp
+.Nm
+is a simple POSIX compliant shell script which can contain autostarted programs, configuration variables, and custom commands to be executed automatically when a window event occurs. Though the default is shell, it can be written in any scripting language.
+.Sh AUTOSTART
+This section is self-explanatory. Each program to start upon login should be placed on their own line, and each line terminated with an ampersand
+.Pq &
+.Sh CONFIGURATION VARIABLES
+.Pp
+The following variables are accepted:
+.Bl -tag -width Ds
+.It Ic BORDERPX Ar size
+size of window borders, in pixels
+.It Ic BARPADDING Ar size
+space reserved for a top bar, in pixels
+.It Ic GAPPX Ar size
+size of gaps, in pixels
+.It Ic FOCUSCOL Ar RRGGBB
+color of focused window border
+.It Ic UNFOCUSCOL Ar RRGGBB
+color of unfocused window border
+.Sh FUNCTIONS
+These are functions used by the window event watcher. This is divided in two sections:
+.Bl -tag -width Ds
+.It Ic BASIC FUNCTIONS
+The basic functions are those called multiple times, either by the ev_ functions or by the window event watcher directly. Example: setborders_focused().
+.It Ic EV_ FUNCTIONS
+These are functions named after specific events and may contain one or more basic function within them. They are called only once in the window event watcher, when their namesake event occurs. Example: ev_map() called when the event watcher receives a MAP event.
+.Sh WINDOW EVENT WATCHER
+.Pp
+The window event watcher is simply
+.Xr wew 1
+piped to a while loop that reads window events and acts up on them. This is the actual window management tool and it is where custom commands and scripts can be executed automatically when a registered window event (such as MAP, UNMAP and DESTROY) occurs.
+.Pp
+For a complete list of events that can be monitored, refer to the
+.Xr wew 1
+manual.
+.Sh SEE ALSO
+.Xr sxwm 1 ,
+.Xr chwb 1 ,
+.Xr chwso 1 ,
+.Xr ignw 1 ,
+.Xr killw 1 ,
+.Xr lsw 1 ,
+.Xr mapw 1 ,
+.Xr pfw 1 ,
+.Xr wattr 1 ,
+.Xr wew 1 ,
+.Xr wmp 1 ,
+.Xr wmv 1 ,
+.Xr wname 1 ,
+.Xr wrs 1 ,
+.Xr wtf 1 ,
+.Xr wtp 1
