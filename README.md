@@ -10,8 +10,8 @@ SXWM is a simple and scriptable window manager for X that comes with a collectio
 the sxwm binary executable only handles the mouse, takes all configure requests, and executes its configuration script (sxwmrc). Everything else is
 handled by the command line utilities, shell scripts, keybindings (via sxhkd or other such programs), and the window event watcher (wew) in sxwmrc. 
 
-Sample scripts and sxhkd bindings can be found in the examples sub-directory. For detailed information about configuring sxwm, read the official
-sxwmrc(5) man page.
+Sample scripts and sxhkd bindings can be found in the examples sub-directory. For detailed information about sxwm, read the official
+sxwm(1) and sxwmrc(5) man pages.
 
 ## Installing  
 Before installing, you will need the xcb header files (lxcb, lxcb-util, lxcb-cursor).
@@ -50,5 +50,5 @@ it may be possible to use the ignw tool to force sxwm to ignore it. This is unte
 
 ## Credits  
 
-SXWM began as a fork of dcat's [swm](https://github.com/dcat/swm), and its utilities are forked from the [wmutils](https://github.com/wmutils
+SXWM began as a fork of dcat's [swm](https://github.com/dcat/swm), and its utilities are forked from the [wmutils](https://github.com/wmutils)
 
